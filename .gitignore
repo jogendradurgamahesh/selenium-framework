@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+/test-output/ 
+/screenshots/ 
+ExtentReport.html 
+*.log 
+/test-output/ 
+/screenshots/ 
+ExtentReport.html 
+*.log 
+*.png 
