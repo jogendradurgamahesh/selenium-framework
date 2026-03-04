@@ -22,7 +22,7 @@ import com.aventstack.extentreports.*;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.crm.qa.base.TestBase;
 
-public class ExtentReporterNG extends TestBase implements ITestListener {
+public class ExtentReporterNG  implements ITestListener {
 
     private static ExtentReports extent;
     private static ExtentTest test;
@@ -46,14 +46,18 @@ public class ExtentReporterNG extends TestBase implements ITestListener {
         test.pass("Test Passed");
     }
 
+   
     @Override
     public void onTestFailure(ITestResult result) {
 
         test.fail(result.getThrowable());
 
-        String screenshotPath = takeScreenshot(result.getMethod().getMethodName());
+        String screenshotPath =
+                (String) result.getAttribute("screenshotPath");
 
-        test.addScreenCaptureFromPath(screenshotPath);
+        if (screenshotPath != null) {
+            test.addScreenCaptureFromPath(screenshotPath);
+        }
     }
 
     @Override
@@ -66,25 +70,25 @@ public class ExtentReporterNG extends TestBase implements ITestListener {
         extent.flush();
     }
 
-    public String takeScreenshot(String testName) {
-
-        String folderPath = System.getProperty("user.dir") + "/screenshots";
-        File folder = new File(folderPath);
-        if (!folder.exists()) folder.mkdirs();
-
-        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-        String timeStamp = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-
-        String filePath = folderPath + "/" + testName + "_" + timeStamp + ".png";
-
-        try {
-            FileUtils.copyFile(src, new File(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return filePath;
-    }
+//    public String takeScreenshot(String testName) {
+//
+//        String folderPath = System.getProperty("user.dir") + "/screenshots";
+//        File folder = new File(folderPath);
+//        if (!folder.exists()) folder.mkdirs();
+//
+//        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+//
+//        String timeStamp = LocalDateTime.now()
+//                .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+//
+//        String filePath = folderPath + "/" + testName + "_" + timeStamp + ".png";
+//
+//        try {
+//            FileUtils.copyFile(src, new File(filePath));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return filePath;
+//    }
 }

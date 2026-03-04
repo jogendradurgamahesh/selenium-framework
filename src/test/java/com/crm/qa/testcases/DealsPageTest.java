@@ -14,7 +14,7 @@ import com.crm.qa.pages.HomePage;
 import com.crm.qa.pages.LoginPage;
 import com.crm.qa.util.TestUtil;
 
-@Listeners(com.crm.qa.util.TestListener.class)
+//@Listeners(com.crm.qa.util.TestListener.class)
 public class DealsPageTest extends TestBase{
 	
 	LoginPage loginPage;
@@ -58,7 +58,7 @@ public class DealsPageTest extends TestBase{
 	
 	@Test(dataProvider ="getCRMTestData")
 //	public void validateCreateNewContact() {
-	public void validateCreateNewContact(String title,String description) {
+	public void validateCreateNewDeals(String title,String description) {
 		homePage.ClickOnDealsLink();
 		dealsPage.createDealForm(title, description);
 		

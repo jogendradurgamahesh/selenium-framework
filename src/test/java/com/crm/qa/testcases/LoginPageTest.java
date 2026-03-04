@@ -10,7 +10,7 @@ import com.crm.qa.base.TestBase;
 import com.crm.qa.pages.HomePage;
 import com.crm.qa.pages.LoginPage;
 
-@Listeners(com.crm.qa.util.TestListener.class)
+//@Listeners(com.crm.qa.util.TestListener.class)
 public class LoginPageTest extends TestBase {
 
 	LoginPage loginPage;

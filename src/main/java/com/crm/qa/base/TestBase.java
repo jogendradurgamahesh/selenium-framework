@@ -1,20 +1,33 @@
+
+
+
+//Author:Mahesh
+
+
+
 package com.crm.qa.base;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-
-import com.crm.qa.util.WebEventListener;
-
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+
+import com.crm.qa.util.WebEventListener;
 
 public class TestBase {
 	
@@ -76,6 +89,47 @@ public	static Properties prop;
 		driver.get(prop.getProperty("url"));
 		
 		
+	}
+	
+	
+	public String takeScreenshot(String testName) {
+
+	    String folderPath = System.getProperty("user.dir") + "/screenshots";
+	    File folder = new File(folderPath);
+	    if (!folder.exists()) {
+	        folder.mkdirs();
+	    }
+
+	    String filePath = folderPath + "/" + testName + "_"
+	            + LocalDateTime.now()
+	            .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
+	            + ".png";
+
+	    try {
+	        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	        FileUtils.copyFile(src, new File(filePath));
+	        System.out.println("📸 Screenshot saved at: " + filePath);
+	    } catch (Exception e) {
+	        System.out.println("Screenshot failed: " + e.getMessage());
+	    }
+
+	    return filePath;
+	}
+	
+	@AfterMethod
+	public void tearDown(ITestResult result) {
+
+	    if (result.getStatus() == ITestResult.FAILURE) {
+
+	        String screenshotPath = takeScreenshot(result.getName());
+
+	        // Store path inside TestNG result object
+	        result.setAttribute("screenshotPath", screenshotPath);
+	    }
+
+	    if (driver != null) {
+	        driver.quit();
+	    }
 	}
 	
 
